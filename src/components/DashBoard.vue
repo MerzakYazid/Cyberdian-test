@@ -14,8 +14,8 @@
     </header>
     <article class="path">
       Home / &#160; <a href="#" class="link">DashBoard</a>
-    </article>
-
+    </article>  
+  <!-- GLOBAL statistics  -->
     <article class="stats">
       <CRow>
         <CCol :xs="4">
@@ -385,6 +385,7 @@
         </CCol>
       </CRow>
     </article>
+    <!-- Chart + widgets -->
     <article>
      <CCard style="margin: 1%;">
         <CCardBody class="traffic">
@@ -393,43 +394,70 @@
             <CCardSubtitle class="mb-2 text-muted">January - July 2021</CCardSubtitle>
           </div>
           <CButtonGroup role="group" aria-label="Basic checkbox toggle button group">
-            <CFormCheck type="radio" :button="{color: 'secondary', variant: 'outline'}" name="btnradio" id="btnradio1" autocomplete="off" label="Day" checked/>
-            <CFormCheck type="radio" :button="{color: 'secondary', variant: 'outline'}" name="btnradio" id="btnradio2" autocomplete="off" label="Month"/>
+            <CFormCheck type="radio" :button="{color: 'secondary', variant: 'outline'}" name="btnradio" id="btnradio1" autocomplete="off" label="Day" />
+            <CFormCheck type="radio" :button="{color: 'secondary', variant: 'outline'}" name="btnradio" id="btnradio2" autocomplete="off" label="Month" checked/>
             <CFormCheck type="radio" :button="{color: 'secondary', variant: 'outline'}" name="btnradio" id="btnradio3" autocomplete="off" label="Year"/>
           </CButtonGroup>
           <CButton component="a" color="primary" href="#" role="button"> <CIcon :icon="cilCloudDownload" size="xl"/></CButton>
         </CCardBody>
-        <CChart
-          :size="{ width: 500, height: 420 }"
-          type="line"
-          :data="{
-            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-            datasets: [
-              {
-                label: 'My First dataset',
-                backgroundColor: 'rgba(220, 220, 220, 0.2)',
-                borderColor: 'rgba(220, 220, 220, 1)',
-                pointBackgroundColor: 'rgba(220, 220, 220, 1)',
-                pointBorderColor: '#fff',
-                data: [40, 20, 12, 39, 10, 40, 39],
-              },
-              {
-                label: 'My Second dataset',
-                backgroundColor: 'rgba(151, 187, 205, 0.2)',
-                borderColor: 'rgba(151, 187, 205, 1)',
-                pointBackgroundColor: 'rgba(151, 187, 205, 1)',
-                pointBorderColor: '#fff',
-                data: [50, 12, 28, 29, 7, 25, 12]
-              }
-            ]
-          }"
-        />
+        <canvas id="myChart" width="400" height="75"></canvas>
+        <CRow class="widgets">
+          <CCol :xs="4">
+            <CWidgetStatsB
+              class="mb-3"
+              :progress="{ color: 'success', value: 75}"
+            >
+              <template #title>29.703 Users (40%)</template>
+              <template #value>Visits</template>
+            </CWidgetStatsB>
+          </CCol>
+          <CCol :xs="4">
+            <CWidgetStatsB
+              class="mb-3"
+              :progress="{ color: 'info', value: 75}"
+              title="24.093 Users (20%)"
+              value="Unique"/>
+          </CCol>
+          <CCol :xs="4">
+            <CWidgetStatsB
+              class="mb-3"
+              :progress="{ color: 'warning', value: 75}"
+              title="78,706 Views (60%)"
+              value="Pageviews"/>
+          </CCol>
+          <CCol :xs="4">
+            <CWidgetStatsB
+              class="mb-3"
+              :progress="{ color: 'danger', value: 75}"
+              title="22,123 Users (80%)"
+              value="New Users"/>
+          </CCol>
+          <CCol :xs="4">
+            <CWidgetStatsB
+              class="mb-3"
+              :progress="{ color: 'primary', value: 75}"
+              title="40,15%"
+              value="Bounce Rate"/>
+          </CCol>
+        </CRow>
       </CCard>
+    </article>
+    <article class="social_buttons">
+      <div class="social fb">
+        <img alt="coreui logo" src="../assets/fb-icon.svg" >
+      </div>
+      <div class="social twt">
+        <img alt="coreui logo" src="../assets/twt-icon.svg" >
+      </div>
+      <div class="social ldn">
+        <img alt="coreui logo" src="../assets/ldn-icon.svg" >
+      </div>
     </article>
   </section>
 </template>
 
 <script>  
+import Chart from 'chart.js/auto';
 import { cilCloudDownload } from '@coreui/icons';
 export default {
   name: "DashBoard",
@@ -439,6 +467,31 @@ export default {
       return {
         cilCloudDownload
       }
+  },
+  mounted(){
+    const ctx = document.getElementById('myChart').getContext('2d');
+
+    const labels = ['January','February','March','April','May','June','July']
+    const data = {
+      labels: labels,
+      datasets: [{
+        label: 'Unique',
+        data: [190, 55, 180, 100, 70, 100, 130],
+        fill: true,
+        borderColor: 'rgb(75, 192, 192)',
+        tension: 0.5,
+      },
+      {
+        label: 'Visits',
+        borderColor: 'rgba(134,213,160,255)',
+        data: [180, 60, 100, 170, 190, 100, 190],
+        tension:0.5
+      }]
+    };
+    const myChart = new Chart(ctx, {
+    type: 'line',
+    data: data,
+}); 
   }
 }
 </script>
@@ -455,7 +508,7 @@ header {
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  height: 7%;
+  height: 8%;
   background: white;
   margin-bottom: 5px;
 }
@@ -500,10 +553,10 @@ header {
 .stats {
   display: flex;
   justify-content: flex-start;
-  width: 100%;
+  width: 99%;
   flex-wrap: nowrap;
-  padding: 1%;
-  
+  margin-left: 1%;  
+  margin-top: 1%;
 }
 .row {
   flex-wrap: nowrap;
@@ -513,5 +566,36 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+.widgets {
+  width: 59%;
+  height: 20%;
+  height: auto;
+  display: flex;
+  margin-left: 1%;
+  margin-top: 1%;
+}
+.social_buttons {
+  display: flex;
+  justify-content: space-evenly;
+  height: 12%;
+  margin: 1%;
+}
+.social {
+  display: flex;
+  width: 25%;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.fb {
+  background: rgba(59,89,152,255);
+}
+.twt {
+background: rgba(1,172,237,255);
+}
+.ldn {
+background: rgba(72,117,180,255);
 }
 </style>

@@ -131,6 +131,7 @@ div {
     margin-left: 14%;
     align-items: center;
     margin-top: 8%;
+    cursor: pointer;
 }
 .icons {
     margin-right: 16%;
